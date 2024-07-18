@@ -1,6 +1,6 @@
 import signInWithGithub from "@/lib/auth/signInWithGithub";
+import signOut from "@/lib/auth/signOut";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -8,14 +8,6 @@ export default async function AuthButton() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const signOut = async () => {
-    "use server";
-
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    return redirect("/");
-  };
 
   return user ? (
     <div className="flex items-center gap-4">
