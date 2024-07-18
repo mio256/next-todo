@@ -41,8 +41,8 @@ const ListTask = ({ userId }: Props) => {
   const handleCheckboxChange = (taskId: number) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === taskId ? { ...task, done: !task.done } : task
-      )
+        task.id === taskId ? { ...task, done: !task.done } : task,
+      ),
     );
   };
 

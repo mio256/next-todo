@@ -4,21 +4,21 @@ import { useState } from "react";
 import createTask from "@/lib/task/createTask";
 
 type Props = {
-  userId: string
+  userId: string;
 };
 
 const TaskForm = ({ userId }: Props) => {
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createTask(userId, title);
     setTitle(""); // フォームをクリア
-  }
+  };
 
   const handleCancel = () => {
     setTitle(""); // フォームをクリア
-  }
+  };
 
   return (
     <form className="w-full max-w-sm" onSubmit={handleSubmit}>
@@ -30,7 +30,10 @@ const TaskForm = ({ userId }: Props) => {
           onChange={(e) => setTitle(e.target.value)}
           value={title}
         />
-        <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="submit">
+        <button
+          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+          type="submit"
+        >
           Add
         </button>
         <button
@@ -42,7 +45,7 @@ const TaskForm = ({ userId }: Props) => {
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
 export default TaskForm;

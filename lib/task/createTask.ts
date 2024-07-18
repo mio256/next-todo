@@ -4,27 +4,27 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function createTask(userId: string, title: string) {
-    const supabase = createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-    if (!user) {
-        return redirect("/");
-    }
+  if (!user) {
+    return redirect("/");
+  }
 
-    const { data, error } = await supabase.from("tasks").insert([
-        {
-            user_id: userId,
-            title: title,
-            done: false,
-        },
-    ]);
+  const { data, error } = await supabase.from("tasks").insert([
+    {
+      user_id: userId,
+      title: title,
+      done: false,
+    },
+  ]);
 
-    if (error) {
-        console.log(error);
-        return redirect("/error");
-    }
+  if (error) {
+    console.log(error);
+    return redirect("/error");
+  }
 
-    return redirect("/protected");
+  return redirect("/protected");
 }
