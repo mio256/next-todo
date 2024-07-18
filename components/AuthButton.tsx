@@ -1,5 +1,5 @@
+import signInWithGithub from "@/lib/auth/signInWithGithub";
 import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function AuthButton() {
@@ -14,7 +14,7 @@ export default async function AuthButton() {
 
     const supabase = createClient();
     await supabase.auth.signOut();
-    return redirect("/login");
+    return redirect("/");
   };
 
   return user ? (
@@ -22,16 +22,17 @@ export default async function AuthButton() {
       Hey, {user.email}!
       <form action={signOut}>
         <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
-          Logout
+          SingOut
         </button>
       </form>
     </div>
   ) : (
-    <Link
-      href="/login"
-      className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
-    >
-      Login
-    </Link>
+    <div className="flex items-center gap-4">
+      <form action={signInWithGithub}>
+        <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
+          SingIn
+        </button>
+      </form>
+    </div>
   );
 }
