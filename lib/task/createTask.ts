@@ -13,7 +13,7 @@ export default async function createTask(userId: string, title: string) {
     return redirect("/");
   }
 
-  const { data, error } = await supabase.from("tasks").insert([
+  const { error } = await supabase.from("tasks").insert([
     {
       user_id: userId,
       title: title,

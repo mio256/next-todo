@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import readTasks from "@/lib/task/readTasks";
+import doneTask from "@/lib/task/doneTask";
 
 type Props = {
   userId: string;
@@ -38,12 +39,13 @@ const ListTask = ({ userId }: Props) => {
     fetchTasks();
   }, [userId]);
 
-  const handleCheckboxChange = (taskId: number) => {
+  const handleCheckboxChange = (id: number) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === taskId ? { ...task, done: !task.done } : task,
+        task.id === id ? { ...task, done: !task.done } : task,
       ),
     );
+    doneTask(id);
   };
 
   if (loading) {

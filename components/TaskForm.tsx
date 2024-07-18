@@ -10,14 +10,14 @@ type Props = {
 const TaskForm = ({ userId }: Props) => {
   const [title, setTitle] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTask(userId, title);
-    setTitle(""); // フォームをクリア
+    setTitle("");
+    await createTask(userId, title);
   };
 
   const handleCancel = () => {
-    setTitle(""); // フォームをクリア
+    setTitle("");
   };
 
   return (

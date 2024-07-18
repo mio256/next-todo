@@ -3,25 +3,25 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
-export default async function readTasks(userId: string) {
+export default async function doneTask(id: number) {
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/");
+    return redirect("/");
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("tasks")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("done", false);
+    .update({ done: true })
+    .eq("id", id);
 
   if (error) {
     console.log(error);
-    redirect("/error");
+    return redirect("/error");
   }
-  return data;
+
+  return redirect("/protected");
 }
