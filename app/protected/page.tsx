@@ -1,8 +1,7 @@
 import AuthButton from "@/components/AuthButton";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import TaskForm from "@/components/TaskForm";
-import ListTask from "@/components/ListTask";
+import TaskManager from "@/components/Task";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -27,8 +26,7 @@ export default async function ProtectedPage() {
 
       <div className="flex-1 flex flex-col gap-20 max-w-4xl px-3">
         <main className="flex-1 flex flex-col gap-6">
-          <TaskForm userId={user.id} />
-          <ListTask userId={user.id} />
+          <TaskManager userId={user.id} />
         </main>
       </div>
 
