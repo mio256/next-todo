@@ -14,6 +14,17 @@ export default async function Index() {
     return redirect("/protected");
   }
 
+  console.log("VERCEL_URL", process.env.VERCEL_URL);
+  console.log(
+    "VERCEL_PROJECT_PRODUCTION_URL",
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  );
+  console.log("NEXT_PUBLIC_VERCEL_URL", process.env.NEXT_PUBLIC_VERCEL_URL);
+  console.log(
+    "NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL",
+    process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
+  );
+
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
