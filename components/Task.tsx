@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import createTask from "@/lib/task/createTask";
 import readTasks from "@/lib/task/readTasks";
 import doneTask from "@/lib/task/doneTask";
@@ -16,61 +16,56 @@ type Task = {
   done: boolean;
 };
 
-const TaskManager = ({ userId }: Props) => {
-  const [title, setTitle] = useState("");
+const useTasks = (userId: string) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const data = await readTasks(userId);
-        if (data) {
-          setTasks(data);
-        } else {
-          setError("Failed to fetch tasks");
-        }
-      } catch (err) {
-        setError("Failed to fetch tasks");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, [userId]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setTitle("");
-    await createTask(userId, title);
+  const fetchTasks = useCallback(async () => {
+    setLoading(true);
     try {
       const data = await readTasks(userId);
       if (data) {
         setTasks(data);
+        setError(null);
       } else {
         setError("Failed to fetch tasks");
       }
-    } catch (err) {
-      setError("Failed to update task");
+    } catch {
+      setError("Failed to fetch tasks");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [userId]);
 
-  const handleCancel = () => {
-    setTitle("");
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
+
+  return { tasks, loading, error, fetchTasks };
+};
+
+const TaskManager = ({ userId }: Props) => {
+  const [title, setTitle] = useState("");
+  const { tasks, loading, fetchTasks } = useTasks(userId);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await createTask(userId, title);
+      setTitle("");
+      await fetchTasks();
+    } catch {
+      setError("Failed to create task");
+    }
   };
 
   const handleCheckboxChange = async (id: number) => {
     try {
       await doneTask(id);
-      const data = await readTasks(userId);
-      if (data) {
-        setTasks(data);
-      } else {
-        setError("Failed to fetch tasks");
-      }
-    } catch (err) {
+      await fetchTasks();
+    } catch {
       setError("Failed to update task");
     }
   };
@@ -107,7 +102,7 @@ const TaskManager = ({ userId }: Props) => {
           <button
             className="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded"
             type="button"
-            onClick={handleCancel}
+            onClick={() => setTitle("")}
           >
             Cancel
           </button>
